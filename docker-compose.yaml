@@ -1,0 +1,91 @@
+version: "3.7"
+
+services:
+  # NODO 1: PUBLICADOR
+  node1:
+    image: quorumengineering/quorum:2.7.0
+    container_name: quorum-node1
+    ports:
+      - "21000:8545"
+    environment:
+      - PRIVATE_CONFIG=ignore #
+    command: 
+      - --dev
+      - --dev.period
+      - "1"
+      - --networkid
+      - "1337"
+      - --rpc
+      - --rpcaddr
+      - 0.0.0.0
+      - --rpcport
+      - "8545"
+      - --rpcapi
+      - admin,eth,debug,miner,net,shh,txpool,personal,web3,istanbul
+      - --rpccorsdomain
+      - "*"
+      - --allow-insecure-unlock
+    networks:
+      carbono-net:
+        ipv4_address: 172.16.239.11
+
+  # NODO 2: AUDITOR
+  node2:
+    image: quorumengineering/quorum:2.7.0
+    container_name: quorum-node2
+    ports:
+      - "21001:8545"
+    environment:
+      - PRIVATE_CONFIG=ignore # 
+    command:
+      - --dev
+      - --dev.period
+      - "1"
+      - --networkid
+      - "1337"
+      - --rpc
+      - --rpcaddr
+      - 0.0.0.0
+      - --rpcport
+      - "8545"
+      - --rpcapi
+      - eth,net,web3,istanbul
+      - --rpccorsdomain
+      - "*"
+    networks:
+      carbono-net:
+        ipv4_address: 172.16.239.12
+
+  # NODO 3: COMPRADOR
+  node3:
+    image: quorumengineering/quorum:2.7.0
+    container_name: quorum-node3
+    ports:
+      - "21002:8545"
+    environment:
+      - PRIVATE_CONFIG=ignore # 
+    command:
+      - --dev
+      - --dev.period
+      - "1"
+      - --networkid
+      - "1337"
+      - --rpc
+      - --rpcaddr
+      - 0.0.0.0
+      - --rpcport
+      - "8545"
+      - --rpcapi
+      - eth,net,web3,istanbul
+      - --rpccorsdomain
+      - "*"
+    networks:
+      carbono-net:
+        ipv4_address: 172.16.239.13
+
+networks:
+  carbono-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.239.0/24
